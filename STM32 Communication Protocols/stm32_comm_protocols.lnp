@@ -1,0 +1,27 @@
+--cpu Cortex-M3
+".\main.o"
+".\mre6183_spi.o"
+".\mre6183_uart.o"
+".\mre6183_led.o"
+".\mre6183_delays.o"
+".\mre6183_i2c.o"
+".\mre6183_shtc3.o"
+".\misc.o"
+".\stm32f10x_adc.o"
+".\stm32f10x_dac.o"
+".\stm32f10x_exti.o"
+".\stm32f10x_flash.o"
+".\stm32f10x_gpio.o"
+".\stm32f10x_i2c.o"
+".\stm32f10x_rcc.o"
+".\stm32f10x_rtc.o"
+".\stm32f10x_spi.o"
+".\stm32f10x_tim.o"
+".\stm32f10x_usart.o"
+".\dma_stm32f10x.o"
+".\gpio_stm32f10x.o"
+".\startup_stm32f10x_md_vl.o"
+".\system_stm32f10x.o"
+--ro-base 0x08000000 --entry 0x08000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\stm32_comm_protocols.map" -o .\stm32_comm_protocols.axf
