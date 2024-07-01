@@ -1,6 +1,6 @@
 #include "../MRE6183_lib/mre6183_i2c.h"
 
-void PeripheralInit_I2C1(void) {
+void I2C1_PeripheralInit(void) {
 	// create init structs
 	GPIO_InitTypeDef GPIO_InitStructure;
 	I2C_InitTypeDef I2C_InitStructure;
@@ -46,7 +46,7 @@ void PeripheralInit_I2C1(void) {
 // This function comes from the microcontroller errata document. In my testing,
 // the stuck BUSY flag that I experienced seems to have actually been caused by a
 // bad peripheral address
-void clear_I2C1_BUSY_flag(void) {
+void I2C1_clear_BUSY_flag(void) {
 	// create init structs
 	GPIO_InitTypeDef GPIO_InitStructure;
 	I2C_InitTypeDef I2C_InitStructure;
@@ -118,7 +118,7 @@ void clear_I2C1_BUSY_flag(void) {
 // PeripheralAddress - this is specific to your peripheral
 // buffer - pointer to array of bytes that contain the data to send
 // num_byte - how many bytes are you sending
-void send_Xb_I2C1(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_byte) {
+void I2C1_send_Xb(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_byte) {
 	if (!num_byte) {
 		return;
 	}
@@ -156,7 +156,7 @@ void send_Xb_I2C1(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_byte)
 // PeripheralAddress - this is specific to your peripheral
 // buffer - pointer to array of bytes that will be filled by the receive operation
 // num_byte - how many bytes are you receiving
-void receive_Xb_I2C1(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_byte) {
+void I2C1_receive_Xb(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_byte) {
 	if (!num_byte) {
 		return;
 	}
@@ -233,7 +233,7 @@ void receive_Xb_I2C1(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_by
 }
 
 // these functions were created but never used
-void send_8b_I2C1(uint8_t PeripheralAddress, uint8_t outByte) {
+void I2C1_send_8b(uint8_t PeripheralAddress, uint8_t outByte) {
 	// wait until the I2C is not busy
 	while(I2C_GetFlagStatus(I2C1 , I2C_FLAG_BUSY));
 	
@@ -284,7 +284,7 @@ void send_16b_I2C1(uint8_t PeripheralAddress, uint16_t outData) {
 	while(I2C_GetFlagStatus(I2C1, I2C_FLAG_STOPF));
 }
 
-uint8_t receive_8b_I2C1(uint8_t PeripheralAddress) {
+uint8_t I2C1_receive_8b(uint8_t PeripheralAddress) {
 	// wait until the I2C is not busy
 	while(I2C_GetFlagStatus(I2C1 , I2C_FLAG_BUSY));
 	
