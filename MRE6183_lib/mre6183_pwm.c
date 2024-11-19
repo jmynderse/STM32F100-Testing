@@ -7,13 +7,15 @@ void PWM_Configuration(void) {
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_OCInitTypeDef  TIM_OCInitStructure;
 
-	// initialize init structs
-	GPIO_StructInit(&GPIO_InitStructure);
-
 	/* Set the desired PWM frequency in Hz */
 	uint32_t PWMFreq = 1000;
 	/* Set the desired PWM max value (100%) */
 	uint32_t PWMMaxValue = 1000;
+
+	// initialize init structs
+	GPIO_StructInit(&GPIO_InitStructure);
+  TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
+  TIM_OCStructInit(&TIM_OCInitStructure);
 	
 	// enable clock on TIM3
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
@@ -42,4 +44,14 @@ void PWM_Configuration(void) {
   TIM_OC3Init(TIM3, &TIM_OCInitStructure);
 }
 
+void PWM_SetValue(uint32_t PWM_value) {
+  TIM3->CCR3 = PWM_value;
+}
 
+void PWM_Enable(void) {
+  TIM_Cmd(TIM3, ENABLE);
+}
+
+void PWM_Disable(void) {
+  TIM_Cmd(TIM3, DISABLE);
+}

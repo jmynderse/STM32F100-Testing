@@ -9,5 +9,9 @@
 void UART_Init(void);
 void UART_CharOut(char serial_char_out);
 void UART_StringOut(char serial_string_out[UART_BUFFER_SIZE]);
+void UART_LineBreak(void);
+char UART_CharIn(void);
+char UART_CharInEcho(void);
+void UART_NumericalStringInEcho(char *buffer);
 
 #endif /*__MRE6183_UART_H */

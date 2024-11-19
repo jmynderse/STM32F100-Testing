@@ -56,3 +56,62 @@ void UART_StringOut(char serial_string_out[UART_BUFFER_SIZE])
 		UART_CharOut(serial_string_out[ii]);
 	}
 }
+
+void UART_LineBreak(void)
+{
+	UART_CharOut('\r');
+	UART_CharOut('\n');
+}
+
+char UART_CharIn(void)
+{
+	uint16_t serial_char_in;
+  
+  // delay until the received data register is not empty
+	while( USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET )
+	// receive the character
+  serial_char_in = USART_ReceiveData(USART2);
+	// return the character
+  return serial_char_in;
+}
+
+char UART_CharInEcho(void)
+{
+	uint16_t serial_char_in;
+  
+  // delay until the received data register is not empty
+	while( USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == RESET )
+	// receive the character
+  serial_char_in = USART_ReceiveData(USART2);
+  // echo the received character
+  UART_CharOut(serial_char_in);
+	// return the character
+  return serial_char_in;
+}
+
+
+void UART_NumericalStringInEcho(char *buffer)
+{
+  uint16_t ii, serial_char_in;
+  ii = 0;
+  
+  while (ii<UART_BUFFER_SIZE) {
+    serial_char_in = UART_CharIn();
+    if ( (serial_char_in >= 0x30) && (serial_char_in <= 0x39) ) {
+      // character is a number between 0 and 9
+      UART_CharOut(serial_char_in);
+      buffer[ii] = serial_char_in;
+      ii++;
+    }
+    else if (serial_char_in == 0x2E) {
+      // character is a period
+      UART_CharOut(serial_char_in);
+      buffer[ii] = serial_char_in;
+      ii++;
+    }
+    else if (serial_char_in == 0x0D) {
+      // character is an enter/return
+      break;
+    }
+  }
+}
