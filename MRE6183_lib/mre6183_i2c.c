@@ -126,7 +126,7 @@ void I2C1_send_Xb(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_byte)
 	// wait until the I2C is not busy
 	while(I2C_GetFlagStatus(I2C1 , I2C_FLAG_BUSY));
 	
-	// Intiate Start Sequence
+	// Initiate Start Sequence
 	I2C_GenerateSTART(I2C1 , ENABLE);
 	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
 	
@@ -230,83 +230,4 @@ void I2C1_receive_Xb(uint8_t PeripheralAddress, uint8_t *buffer, uint32_t num_by
 	while(I2C_GetFlagStatus(I2C1, I2C_FLAG_STOPF));
 	
 	return;
-}
-
-// these functions were created but never used
-void I2C1_send_8b(uint8_t PeripheralAddress, uint8_t outByte) {
-	// wait until the I2C is not busy
-	while(I2C_GetFlagStatus(I2C1 , I2C_FLAG_BUSY));
-	
-	// Intiate Start Sequence
-	I2C_GenerateSTART(I2C1 , ENABLE);
-	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
-	
-	// Send Address
-	I2C_Send7bitAddress(I2C1, PeripheralAddress, I2C_Direction_Transmitter);
-	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-
-	// Send Data
-	I2C_SendData(I2C1, outByte);
-	while(!I2C_CheckEvent(I2C1 , I2C_EVENT_MASTER_BYTE_TRANSMITTED));
-	
-	// Initiate Stop
-	I2C_GenerateSTOP(I2C1, ENABLE);
-	while(I2C_GetFlagStatus(I2C1, I2C_FLAG_STOPF));
-}
-
-void send_16b_I2C1(uint8_t PeripheralAddress, uint16_t outData) {
-	uint8_t MSB;
-	uint8_t LSB;
-	LSB = (uint8_t) (outData & 0xFF);
-	MSB = (uint8_t) ( (outData >> 8) & 0xFF);
-	
-	// wait until the I2C is not busy
-	while(I2C_GetFlagStatus(I2C1 , I2C_FLAG_BUSY));
-	
-	// Intiate Start Sequence
-	I2C_GenerateSTART(I2C1 , ENABLE);
-	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
-	
-	// Send Address
-	I2C_Send7bitAddress(I2C1, PeripheralAddress, I2C_Direction_Transmitter);
-	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-
-	// Send Data
-	I2C_SendData(I2C1, MSB);
-	while(!I2C_CheckEvent(I2C1 , I2C_EVENT_MASTER_BYTE_TRANSMITTED));
-	
-	// Send Data
-	I2C_SendData(I2C1, LSB);
-	while(!I2C_CheckEvent(I2C1 , I2C_EVENT_MASTER_BYTE_TRANSMITTED));
-	
-	// Initiate Stop
-	I2C_GenerateSTOP(I2C1, ENABLE);
-	while(I2C_GetFlagStatus(I2C1, I2C_FLAG_STOPF));
-}
-
-uint8_t I2C1_receive_8b(uint8_t PeripheralAddress) {
-	// wait until the I2C is not busy
-	while(I2C_GetFlagStatus(I2C1 , I2C_FLAG_BUSY));
-	
-	// Enable Acknowledgment, clear POS flag
-	I2C_AcknowledgeConfig(I2C1, ENABLE);
-	I2C_NACKPositionConfig(I2C1, I2C_NACKPosition_Current);
-
-	// Intiate Start Sequence (wait for EV5)
-	I2C_GenerateSTART(I2C1, ENABLE);
-	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
-
-	// Send Address
-	I2C_Send7bitAddress(I2C1, PeripheralAddress, I2C_Direction_Receiver);
-	while(!I2C_GetFlagStatus(I2C1, I2C_FLAG_ADDR));
-	
-	// Read 1 Byte
-	I2C_AcknowledgeConfig(I2C1, DISABLE);
-	__disable_irq ();
-	(void) I2C1 ->SR2;
-	I2C_GenerateSTOP(I2C1, ENABLE);
-	__enable_irq ();
-	// Receive data EV7
-	while(! I2C_GetFlagStatus(I2C1, I2C_FLAG_RXNE));
-	return I2C_ReceiveData(I2C1);
 }
